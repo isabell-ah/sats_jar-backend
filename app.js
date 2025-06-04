@@ -44,7 +44,9 @@ const validOrigins = corsOrigins.filter(Boolean);
 
 app.use(
   cors({
-    origin: validOrigins,
+    origin: validOrigins.map((origin) =>
+      origin.includes('://') ? origin : `http://${origin}`
+    ),
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,

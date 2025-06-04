@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 const { authenticateToken } = require('../middlewares/authMiddleware');
-
+console.log('Loading auth routes');
 // Handle OPTIONS requests for CORS preflight
 router.options('*', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*');
