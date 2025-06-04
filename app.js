@@ -34,9 +34,9 @@ const corsOrigins = [
   'http://localhost:3000',
   'http://localhost:8080',
   'http://localhost:8081',
-  // Production frontend URLs (update these with your actual domains)
+  // Production frontend URLs
   process.env.FRONTEND_URL, // Set this in production environment
-  // Add your Vercel/Netlify URLs here when deployed
+  'https://satsjar-frontend-doeo.vercel.app', // Vercel deployment URL
 ];
 
 // Filter out undefined values
@@ -45,11 +45,24 @@ const validOrigins = corsOrigins.filter(Boolean);
 app.use(
   cors({
     origin: validOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   })
 );
+
+// Add a middleware to handle preflight requests and set CORS headers manually
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS, PATCH'
+  );
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 // JSON parsing with error handling
 app.use(
