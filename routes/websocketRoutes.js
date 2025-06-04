@@ -33,7 +33,7 @@ function setupWebSocketServer(server) {
 
     try {
       // Verify JWT token
-      const decoded = jwt.verify(token, config.jwt.secret);
+      const decoded = jwt.verify(token, config.server.jwtSecret);
       const userId = decoded.userId;
       const userRole = decoded.role;
 

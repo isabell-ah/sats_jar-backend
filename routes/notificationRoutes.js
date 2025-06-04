@@ -7,12 +7,12 @@ const {
   getNotifications,
   markNotificationsRead
 } = require('../controllers/notificationController');
-const { protect } = require('../middlewares/authMiddleware');
+const { authenticateToken } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
 // All routes require authentication
-router.use(protect);
+router.use(authenticateToken);
 
 // SMS routes
 router.post('/test-sms', sendTestSMS);

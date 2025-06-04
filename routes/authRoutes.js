@@ -16,7 +16,11 @@ router.options('*', (req, res) => {
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.post('/child-login', authController.childLogin);
-router.post('/create-child', authenticateToken, authController.createChildAccount);
+router.post(
+  '/create-child',
+  authenticateToken,
+  authController.createChildAccount
+);
 router.post('/logout', authController.logout);
 router.post('/refresh-token', authController.refreshToken);
 router.post('/verify-token', authenticateToken, (req, res) => {
