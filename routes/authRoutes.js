@@ -1,30 +1,31 @@
-// authRoutes.js
+// routes/authRoutes.js
 const express = require('express');
-const router = express.Router();
-const authController = require('../controllers/authController');
-const { authenticateToken } = require('../middlewares/authMiddleware');
-console.log('Loading auth routes');
-// Handle OPTIONS requests for CORS preflight
-router.options('*', (req, res) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.sendStatus(204);
-});
+const {
+  register,
+  login,
+  createChildAccount,
+  deleteUser,
+  getUser,
+  childLogin,
+  adminLogin,
+} = require('../controllers/authController');
+const { protect, authenticateToken } = require('../middlewares/authMiddleware');
 
-// Auth routes
-router.post('/register', authController.register);
-router.post('/login', authController.login);
-router.post('/child-login', authController.childLogin);
-router.post(
-  '/create-child',
-  authenticateToken,
-  authController.createChildAccount
-);
-router.post('/logout', authController.logout);
-router.post('/refresh-token', authController.refreshToken);
-router.post('/verify-token', authenticateToken, (req, res) => {
-  res.status(200).json({ valid: true, user: req.user });
-});
+const router = express.Router();
+
+// Public routes
+router.post('/register', register);
+router.post('/login', login);
+router.post('/child-login', childLogin);
+router.post('/admin-login', adminLogin);
+
+// Protected routes
+router.post('/create-child', authenticateToken, createChildAccount);
+
+// Admin routes
+router.get('/users', getUser);
+
+// For testing purposes only - remove in production
+router.delete('/delete-user/:phoneNumber', deleteUser);
 
 module.exports = router;
